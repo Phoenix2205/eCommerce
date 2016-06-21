@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="colorSplashBlue">#46dcff</color>
+    <color name="colorStatusBar">#00bad2</color>
+    <color name="colorCreateAccountButton">#68beff</color>
+    <color name="colorSignInButton">#ffffff</color>
+    <color name="holo_blue_dark">#ff0099cc</color>
+    <color name="view_divider_color">#BABABA</color>
+    <color name="view_divider_color_2">#DADADA</color>
+    <color name="facebook_icon_color">#3b5998</color>
+    <color name="actionbar_opacity">#33000000</color>
+
+
+    <color name="toolbar_explore_color">#0392cf</color>
+
+</resources>
