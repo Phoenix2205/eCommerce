@@ -24,11 +24,4 @@
         android:title="Credit Cards"
         android:key="cards" />
 
-
-
-
-
-
-
-
 </PreferenceScreen>

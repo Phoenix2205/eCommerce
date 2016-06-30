@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.example.sony.ecommerce.Adapter.OnSaleDataAdapter;
 import com.example.sony.ecommerce.Adapter.ProductDataAdapter;
 import com.example.sony.ecommerce.Adapter.SpacesItemDecoration;
 import com.example.sony.ecommerce.Model.Product;
@@ -67,7 +68,7 @@ public class FragmentOnSale extends Fragment {
 
                 productsOnSale=getProductsOnSale(productList);
                 Log.d("Product On Sale",String.valueOf(productsOnSale.size()));
-                adapter = new ProductDataAdapter(getActivity(),productsOnSale);
+                adapter = new OnSaleDataAdapter(getActivity(),productsOnSale);
                 recyclerView.setAdapter(adapter);
                 recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
                 SpacesItemDecoration decoration = new SpacesItemDecoration(16);

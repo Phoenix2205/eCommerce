@@ -10,4 +10,10 @@
         android:layout_height="200dp"
         android:id="@+id/image_view_banner_setting"/>
 
+    <android.support.v7.widget.ListViewCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/setting_list" />
+
+
 </FrameLayout>

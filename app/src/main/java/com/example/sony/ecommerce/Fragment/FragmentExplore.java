@@ -47,7 +47,7 @@ public class FragmentExplore extends Fragment {
     Spinner spinner;
     List<ProductCategory> productCat= new ArrayList<>();
     List<ProductCategory>productCatParent=new ArrayList<>();
-    private EventBus bus = EventBus.getDefault();
+    //private EventBus bus = EventBus.getDefault();
     public FragmentExplore() {
         // Required empty public constructor
     }
@@ -65,29 +65,7 @@ public class FragmentExplore extends Fragment {
         mViewPager = (ViewPager) view.findViewById(R.id.viewpager);
 
         tabLayout = (TabLayout)view.findViewById(R.id.sliding_tabs);
-
-
         spinner= (Spinner)view.findViewById(R.id.spinner);
-
-        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-
-                String tabName=tab.getText().toString();
-                Toast.makeText(getActivity(),tabName, Toast.LENGTH_SHORT).show();
-                bus.post(new MessageEvent(tabName));
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
 
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -98,6 +76,20 @@ public class FragmentExplore extends Fragment {
                         ,productCatParent.get(position).getChildrenCat());
                 mViewPager.setAdapter(viewPagerExploreAdapter);
                 tabLayout.setupWithViewPager(mViewPager);
+                tabLayout.setOnTabSelectedListener(
+                        new TabLayout.ViewPagerOnTabSelectedListener(mViewPager) {
+                            @Override
+                            public void onTabSelected(TabLayout.Tab tab) {
+                                super.onTabSelected(tab);
+                                String tabName=tab.getText().toString();
+                                Log.d("Tab name",tabName);
+                                EventBus.getDefault().post(new MessageEvent(tabName));
+                            }
+                        });
+
+
+
+
             }
 
             @Override
@@ -123,6 +115,9 @@ public class FragmentExplore extends Fragment {
                 productCat=categoryResponse.getProductCategories();
                 getParentCategory(productCat);
                 spinner.setAdapter(new SpinnerAdapter(getActivity(),productCatParent));
+
+
+
             }
 
 
@@ -145,7 +140,6 @@ public class FragmentExplore extends Fragment {
 
         getChildren(productCat);
 
-       // createTree(productCatParent);
     }
 
     private void getChildren(List<ProductCategory> productCat) {

@@ -22,6 +22,7 @@ import com.example.sony.ecommerce.Service.WooCommerceService;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -37,7 +38,7 @@ public class FragmentExploreChild extends Fragment {
     RecyclerView categoryListView;
     RecyclerView.LayoutManager layoutManager;
     RecyclerView.Adapter adapter;
-    static String catName;
+   static String catName;
     static Context context;
     public FragmentExploreChild() {
         // Required empty public constructor
@@ -62,14 +63,17 @@ public class FragmentExploreChild extends Fragment {
 
         layoutManager =  new LinearLayoutManager(context);
 
-        getData();
-       Toast.makeText(context,catName, Toast.LENGTH_SHORT).show();
+
+     //  Toast.makeText(context,catName, Toast.LENGTH_SHORT).show();
         return view;
     }
     @Subscribe
-    public void onMessageEvent(MessageEvent event){
-        //Toast.makeText(getActivity(), event.message, Toast.LENGTH_SHORT).show();
-        catName=event.message;
+    public void onEvent(MessageEvent event){
+        Toast.makeText(getActivity(), event.message, Toast.LENGTH_SHORT).show();
+         catName=event.message;
+        getData(catName);
+        Log.i("Tab name received",catName);
+
     }
 
     @Override
@@ -85,7 +89,7 @@ public class FragmentExploreChild extends Fragment {
     }
 
 
-    void getData()
+    void getData( String catName)
     {
         WooCommerceService service = ServiceGenerator.createService(WooCommerceService.class);
         Call<ProductResponse> ListCategoryResponseCall= service.getListProductByCatName(catName);
