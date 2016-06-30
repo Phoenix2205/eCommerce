@@ -10,13 +10,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.sony.ecommerce.Adapter.ProductDataAdapter;
+import com.example.sony.ecommerce.Model.MessageEvent;
 import com.example.sony.ecommerce.Model.Product;
 import com.example.sony.ecommerce.Model.ProductResponse;
 import com.example.sony.ecommerce.R;
 import com.example.sony.ecommerce.Service.ServiceGenerator;
 import com.example.sony.ecommerce.Service.WooCommerceService;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.List;
 
@@ -32,6 +37,7 @@ public class FragmentExploreChild extends Fragment {
     RecyclerView categoryListView;
     RecyclerView.LayoutManager layoutManager;
     RecyclerView.Adapter adapter;
+    static String catName;
     static Context context;
     public FragmentExploreChild() {
         // Required empty public constructor
@@ -43,6 +49,7 @@ public class FragmentExploreChild extends Fragment {
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
         fragment.setArguments(args);
         context=activityContext;
+       // EventBus.getDefault().register(context);
         return fragment;
     }
 
@@ -55,8 +62,33 @@ public class FragmentExploreChild extends Fragment {
 
         layoutManager =  new LinearLayoutManager(context);
 
+        getData();
+       Toast.makeText(context,catName, Toast.LENGTH_SHORT).show();
+        return view;
+    }
+    @Subscribe
+    public void onMessageEvent(MessageEvent event){
+        //Toast.makeText(getActivity(), event.message, Toast.LENGTH_SHORT).show();
+        catName=event.message;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
+    }
+
+
+    void getData()
+    {
         WooCommerceService service = ServiceGenerator.createService(WooCommerceService.class);
-        Call<ProductResponse> ListCategoryResponseCall= service.getListProducts();
+        Call<ProductResponse> ListCategoryResponseCall= service.getListProductByCatName(catName);
         ListCategoryResponseCall.enqueue(new Callback<ProductResponse>() {
 
             @Override
@@ -68,6 +100,7 @@ public class FragmentExploreChild extends Fragment {
                 adapter = new ProductDataAdapter(context,productList);
                 categoryListView.setAdapter(adapter);
 
+
             }
 
             @Override
@@ -75,9 +108,6 @@ public class FragmentExploreChild extends Fragment {
 
             }
         });
-
-
-        return view;
     }
 
 

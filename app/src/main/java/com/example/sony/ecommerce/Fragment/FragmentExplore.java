@@ -14,15 +14,20 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.sony.ecommerce.Adapter.SpinnerAdapter;
 import com.example.sony.ecommerce.Adapter.ViewPagerExploreAdapter;
 import com.example.sony.ecommerce.Model.CategoryResponse;
+import com.example.sony.ecommerce.Model.MessageEvent;
 import com.example.sony.ecommerce.Model.ProductCategory;
 import com.example.sony.ecommerce.R;
 import com.example.sony.ecommerce.Service.ServiceGenerator;
 import com.example.sony.ecommerce.Service.WooCommerceService;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +46,8 @@ public class FragmentExplore extends Fragment {
     TabLayout tabLayout;
     Spinner spinner;
     List<ProductCategory> productCat= new ArrayList<>();
-    List<ProductCategory>productCatParent;
+    List<ProductCategory>productCatParent=new ArrayList<>();
+    private EventBus bus = EventBus.getDefault();
     public FragmentExplore() {
         // Required empty public constructor
     }
@@ -51,29 +57,57 @@ public class FragmentExplore extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view= inflater.inflate(R.layout.fragment_explore, container, false);
-        // Inflate the layout for this fragment
-
-        //set toolbar for fragment
         toolbar=(Toolbar)view.findViewById(R.id.toolbar_explore);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
         setHasOptionsMenu(true);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
-
-        viewPagerExploreAdapter = new ViewPagerExploreAdapter(getChildFragmentManager(),getActivity());
-        // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) view.findViewById(R.id.viewpager);
-        mViewPager.setAdapter(viewPagerExploreAdapter);
 
         tabLayout = (TabLayout)view.findViewById(R.id.sliding_tabs);
-        tabLayout.setupWithViewPager(mViewPager);
+
 
         spinner= (Spinner)view.findViewById(R.id.spinner);
 
-        getCategory();
+        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
 
+                String tabName=tab.getText().toString();
+                Toast.makeText(getActivity(),tabName, Toast.LENGTH_SHORT).show();
+                bus.post(new MessageEvent(tabName));
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                viewPagerExploreAdapter = new ViewPagerExploreAdapter(getChildFragmentManager(),getActivity()
+                        ,productCatParent.get(position).getChildrenCat());
+                mViewPager.setAdapter(viewPagerExploreAdapter);
+                tabLayout.setupWithViewPager(mViewPager);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
+        getCategory();
 
         return view;
     }
@@ -89,9 +123,9 @@ public class FragmentExplore extends Fragment {
                 productCat=categoryResponse.getProductCategories();
                 getParentCategory(productCat);
                 spinner.setAdapter(new SpinnerAdapter(getActivity(),productCatParent));
-
-
             }
+
+
 
             @Override
             public void onFailure(Call<CategoryResponse> call, Throwable t) {
@@ -121,22 +155,11 @@ public class FragmentExplore extends Fragment {
             for (int y=0;y<productCat.size();y++)
             {
                 if (productCatParent.get(i).getId()==productCat.get(y).getParent())
-                    productChild.add(productCat.get(i));
+                    productChild.add(productCat.get(y));
             }
             productCatParent.get(i).setChildrenCat(productChild);
         }
     }
-
-//    private void createTree(List<ProductCategory> productCatParent) {
-//        Tree<ProductCategory>tree= new Tree<>();
-//        ProductCategory root = new ProductCategory();
-//        Node<ProductCategory> rootNode  = new Node<>(root);
-//        tree.setRootElement(rootNode);
-//        for (ProductCategory productCatgory:productCatParent){//lay parent
-//            Node<ProductCategory> nodeParent = new Node<>(productCatgory);
-//            rootNode.addChild(nodeParent);
-//        }
-
 
 
 
@@ -151,4 +174,6 @@ public class FragmentExplore extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu,menu);
     }
+
+
 }

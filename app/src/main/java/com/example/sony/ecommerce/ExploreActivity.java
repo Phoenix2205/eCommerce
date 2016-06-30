@@ -8,6 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 import com.example.sony.ecommerce.Fragment.FragmentExplore;
+import com.example.sony.ecommerce.Fragment.FragmentOnSale;
+import com.example.sony.ecommerce.Fragment.FragmentSetting;
 
 public class ExploreActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -82,9 +84,17 @@ public class ExploreActivity extends AppCompatActivity
         } else if (id == R.id.nav_cart) {
 
         } else if (id == R.id.nav_setting) {
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.explore_contain, new FragmentSetting()).commit();
 
         } else if (id == R.id.nav_logout) {
 
+        } else
+        {
+            FragmentOnSale fragmentOnSale = new FragmentOnSale();
+            fragmentTransaction.replace(R.id.explore_contain,fragmentOnSale);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

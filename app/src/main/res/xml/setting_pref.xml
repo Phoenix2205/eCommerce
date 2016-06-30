@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <EditTextPreference
+        android:title="Email"
+        android:summary="rishabh.pugalia@gmail.com"
+        android:key="email" />
+
+    <EditTextPreference
+        android:title="Term &amp; Condition"
+        android:summary="rishabh.pugalia@gmail.com"
+        android:key="email" />
+
+    <SwitchPreference
+        android:title ="Push Notifications"
+        android:defaultValue="false"
+        android:key="pushNotification"/>
+
+    <SwitchPreference
+        android:title ="Email Notifications"
+        android:defaultValue="false"
+        android:key="emailNotification"/>
+
+    <EditTextPreference
+        android:title="Credit Cards"
+        android:key="cards" />
+
+
+
+
+
+
+
+
+</PreferenceScreen>

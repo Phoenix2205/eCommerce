@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/viewA"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.Toolbar
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/toolbar_product_detail"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:background="@color/colorSplashBlue"
+                    app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="447dp"
+                        android:id="@+id/image_view_product_detail" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="Category"
+                        android:id="@+id/text_view_category_product_detail_name"
+                        android:layout_gravity="bottom"
+                        android:gravity="center_vertical"
+                        android:alpha="0.8"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:textColor="@android:color/white"
+                        android:background="@color/view_divider_color"/>
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:paddingTop="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Product Name | Catalog"
+                    android:id="@+id/text_view_product_detail_name" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Price"
+                    android:textColor="@android:color/holo_orange_light"
+                    android:id="@+id/text_view_product_detail_price" />
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageButton
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="45dp"
+                        android:background="@drawable/image_border"
+                        android:src="@drawable/ic_heart"
+                        android:id="@+id/image_button_icon_favorite" />
+
+                    <ImageButton
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="45dp"
+                        android:background="@drawable/image_border"
+                        android:src="@drawable/ic_chat"
+                        android:id="@+id/image_button_icon_chat" />
+
+                    <ImageButton
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="45dp"
+                        android:background="@drawable/image_border"
+                        android:src="@drawable/ic_more"
+                        android:id="@+id/image_button_icon_more" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Description, This is a demo "
+                    android:id="@+id/text_view_product_detail_description" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <android.support.v4.view.ViewPager
+                        android:id="@+id/view_pager_product_detail"
+                        android:layout_width="match_parent"
+                        android:layout_height="250dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentEnd="true" />
+
+                    <com.example.annie.glam.ViewPager.CirclePageIndicator
+                        android:id="@+id/indicator_product_detail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="10dip"
+                        android:layout_alignBottom="@+id/view_pager_product_detail"
+                        android:layout_alignParentStart="true" />
+
+
+                </RelativeLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_product_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:clickable="true"
+        android:src="@drawable/ic_plus"
+        app:layout_anchor="@id/viewA"
+        app:layout_anchorGravity="bottom|right|end"/>
+
+</android.support.design.widget.CoordinatorLayout>

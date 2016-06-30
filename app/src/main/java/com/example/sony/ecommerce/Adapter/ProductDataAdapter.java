@@ -55,11 +55,11 @@ public class ProductDataAdapter extends RecyclerView.Adapter {
 
         public ViewHolder(View itemView) {
             super(itemView);
-            productPhoto=(ImageView)itemView.findViewById(R.id.image_view_product);
+            productPhoto=(ImageView)itemView.findViewById(R.id.image_view_product_explore_cell);
          //   categoryName=(TextView) itemView.findViewById(R.id.);
-            productName=(TextView)itemView.findViewById(R.id.text_view_product_name);
-            price=(TextView)itemView.findViewById(R.id.text_view_price);
-            add=(Button)itemView.findViewById(R.id.button_add_cell);
+            productName=(TextView)itemView.findViewById(R.id.text_view_product_name_explore_cell);
+            price=(TextView)itemView.findViewById(R.id.text_view_price_explore_cell);
+            add=(Button)itemView.findViewById(R.id.button_add_explore_cell);
 
         }
     }

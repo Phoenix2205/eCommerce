@@ -17,7 +17,7 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:id="@+id/image_view_product" />
+                android:id="@+id/image_view_product_explore_cell" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -28,24 +28,24 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="Product Name - Shop Name"
-                    android:id="@+id/text_view_product_name" />
+                    android:id="@+id/text_view_product_name_explore_cell" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="Price "
-                    android:id="@+id/text_view_price"
-                    android:layout_below="@id/text_view_product_name"/>
+                    android:id="@+id/text_view_price_explore_cell"
+                    android:layout_below="@id/text_view_product_name_explore_cell"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:text="Annie Shop"
-                    android:id="@+id/text_view_shop_name"
-                    android:layout_alignBaseline="@id/text_view_price"
-                    android:layout_toEndOf="@id/text_view_price"
+                    android:id="@+id/text_view_shop_name_explore_cell"
+                    android:layout_alignBaseline="@id/text_view_price_explore_cell"
+                    android:layout_toEndOf="@id/text_view_price_explore_cell"
                     />
 
                 <Button
@@ -55,7 +55,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="16dp"
                     android:text="+ add"
-                    android:id="@+id/button_add_cell" />
+                    android:id="@+id/button_add_explore_cell" />
             </RelativeLayout>
 
         </LinearLayout>

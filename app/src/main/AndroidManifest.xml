@@ -32,6 +32,7 @@
             android:name=".ExploreActivity"
             android:label="@string/title_activity_explore"
             android:theme="@style/ToolBarExplore" />
+        <activity android:name=".ProductDetailActivity"></activity>
     </application>
 
 </manifest>

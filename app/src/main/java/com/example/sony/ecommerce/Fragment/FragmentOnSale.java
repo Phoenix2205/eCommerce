@@ -30,7 +30,7 @@ import retrofit2.Response;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class OnSaleFragment extends Fragment {
+public class FragmentOnSale extends Fragment {
 
     ImageView imageViewProduct;
     RecyclerView recyclerView;
@@ -38,7 +38,7 @@ public class OnSaleFragment extends Fragment {
     RecyclerView.Adapter adapter;
     List<Product> productsOnSale;
 
-    public OnSaleFragment() {
+    public FragmentOnSale() {
         // Required empty public constructor
     }
 
@@ -49,7 +49,7 @@ public class OnSaleFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_on_sale,container,false);
         imageViewProduct=(ImageView)v.findViewById(R.id.image_view_banner);
-        Glide.with(getActivity()).load(R.drawable.sale).into(imageViewProduct);
+        Glide.with(getActivity()).load(R.drawable.promo_banner).into(imageViewProduct);
 
 
         recyclerView=(RecyclerView)v.findViewById(R.id.recycler_view_on_sale);
