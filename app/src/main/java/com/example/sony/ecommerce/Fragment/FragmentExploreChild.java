@@ -22,7 +22,6 @@ import com.example.sony.ecommerce.Service.WooCommerceService;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -60,7 +59,6 @@ public class FragmentExploreChild extends Fragment {
         // Inflate the layout for this fragment
         View view=inflater.inflate(R.layout.fragment_explore_child, container, false);
         categoryListView=(RecyclerView)view.findViewById(R.id.recycler_view_explore_child);
-
         layoutManager =  new LinearLayoutManager(context);
 
 
@@ -70,7 +68,7 @@ public class FragmentExploreChild extends Fragment {
     @Subscribe
     public void onEvent(MessageEvent event){
         Toast.makeText(getActivity(), event.message, Toast.LENGTH_SHORT).show();
-         catName=event.message;
+        catName=event.message;
         getData(catName);
         Log.i("Tab name received",catName);
 

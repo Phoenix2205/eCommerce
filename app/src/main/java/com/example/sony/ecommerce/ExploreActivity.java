@@ -9,7 +9,6 @@ import android.view.MenuItem;
 
 import com.example.sony.ecommerce.Fragment.FragmentExplore;
 import com.example.sony.ecommerce.Fragment.FragmentOnSale;
-import com.example.sony.ecommerce.Fragment.FragmentSetting;
 
 public class ExploreActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -84,8 +83,12 @@ public class ExploreActivity extends AppCompatActivity
         } else if (id == R.id.nav_cart) {
 
         } else if (id == R.id.nav_setting) {
-            getFragmentManager().beginTransaction()
-                    .replace(R.id.explore_contain, new FragmentSetting()).commit();
+//            getFragmentManager().beginTransaction()
+//                    .replace(R.id.explore_contain, new FragmentSetting()).commit();
+//            FragmentSetting fragmentSetting = new FragmentSetting();
+//            fragmentTransaction.replace(R.id.explore_contain,fragmentSetting);
+//            fragmentTransaction.addToBackStack(null);
+//            fragmentTransaction.commit();
 
         } else if (id == R.id.nav_logout) {
 

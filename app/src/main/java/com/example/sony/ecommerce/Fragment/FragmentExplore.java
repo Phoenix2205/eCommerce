@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.example.sony.ecommerce.Adapter.SpinnerAdapter;
 import com.example.sony.ecommerce.Adapter.ViewPagerExploreAdapter;
@@ -47,7 +46,7 @@ public class FragmentExplore extends Fragment {
     Spinner spinner;
     List<ProductCategory> productCat= new ArrayList<>();
     List<ProductCategory>productCatParent=new ArrayList<>();
-    //private EventBus bus = EventBus.getDefault();
+
     public FragmentExplore() {
         // Required empty public constructor
     }
@@ -63,19 +62,28 @@ public class FragmentExplore extends Fragment {
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         mViewPager = (ViewPager) view.findViewById(R.id.viewpager);
-
         tabLayout = (TabLayout)view.findViewById(R.id.sliding_tabs);
         spinner= (Spinner)view.findViewById(R.id.spinner);
-
+        getCategory();
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
+            public void onItemSelected(AdapterView<?> parent, View view, final int position, long id) {
+                 final String noChildParent="";
                 viewPagerExploreAdapter = new ViewPagerExploreAdapter(getChildFragmentManager(),getActivity()
                         ,productCatParent.get(position).getChildrenCat());
                 mViewPager.setAdapter(viewPagerExploreAdapter);
                 tabLayout.setupWithViewPager(mViewPager);
+
+                if (productCatParent.get(position).getChildrenCat().size()!=0)
+                    EventBus.getDefault().post(new MessageEvent(tabLayout.getTabAt(0).getText().toString()));
+                else
+                {
+                    String temp=productCatParent.get(position).getName().toString();
+                    Log.d("cat no child",temp);
+                    EventBus.getDefault().post(new MessageEvent(temp));
+                }
+
                 tabLayout.setOnTabSelectedListener(
                         new TabLayout.ViewPagerOnTabSelectedListener(mViewPager) {
                             @Override
@@ -83,11 +91,14 @@ public class FragmentExplore extends Fragment {
                                 super.onTabSelected(tab);
                                 String tabName=tab.getText().toString();
                                 Log.d("Tab name",tabName);
-                                EventBus.getDefault().post(new MessageEvent(tabName));
+                           //     if (productCatParent.get(position).getChildrenCat().size()!=0)
+                                    EventBus.getDefault().post(new MessageEvent(tabName));
+//                               / else {
+//                                    String temp = productCatParent.get(position).getName();
+//                                    EventBus.getDefault().post(temp);
+//                                }
                             }
                         });
-
-
 
 
             }
@@ -99,7 +110,8 @@ public class FragmentExplore extends Fragment {
         });
 
 
-        getCategory();
+
+
 
         return view;
     }
@@ -151,7 +163,9 @@ public class FragmentExplore extends Fragment {
                 if (productCatParent.get(i).getId()==productCat.get(y).getParent())
                     productChild.add(productCat.get(y));
             }
+            if (productChild.size()!=0)
             productCatParent.get(i).setChildrenCat(productChild);
+
         }
     }
 
