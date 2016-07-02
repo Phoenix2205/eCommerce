@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.v7.widget.Toolbar
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:layout_scrollFlags="scroll|enterAlways"
+    android:layout_width="match_parent"
+    android:id="@+id/toolbar_explore"
+    android:layout_height="?attr/actionBarSize"
+    android:background="@color/colorSplashBlue"
+    android:minHeight="?attr/actionBarSize"
+    app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:dropDownVerticalOffset="0dp"
+        android:popupBackground="@android:color/black"
+        />
+
+</android.support.v7.widget.Toolbar>
+

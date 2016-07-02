@@ -2,13 +2,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.example.sony.ecommerce.Fragment.FragmentExploreChild">
 
     <!-- TODO: Update blank fragment layout -->
 
-
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/recycler_view_explore_child" />
+        android:id="@+id/recycler_view_explore_child"
+
+      />
 </FrameLayout>
