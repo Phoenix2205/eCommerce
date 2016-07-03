@@ -4,8 +4,10 @@ package com.example.sony.ecommerce.Fragment;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,8 +21,10 @@ import android.widget.Spinner;
 
 import com.example.sony.ecommerce.Adapter.SpinnerAdapter;
 import com.example.sony.ecommerce.Adapter.ViewPagerExploreAdapter;
+import com.example.sony.ecommerce.ExploreActivity;
+import com.example.sony.ecommerce.Message.SearchKey;
 import com.example.sony.ecommerce.Model.CategoryResponse;
-import com.example.sony.ecommerce.Model.MessageEvent;
+import com.example.sony.ecommerce.Message.MessageEvent;
 import com.example.sony.ecommerce.Model.ProductCategory;
 import com.example.sony.ecommerce.R;
 import com.example.sony.ecommerce.Service.ServiceGenerator;
@@ -69,7 +73,7 @@ public class FragmentExplore extends Fragment {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, final int position, long id) {
-                 final String noChildParent="";
+
                 viewPagerExploreAdapter = new ViewPagerExploreAdapter(getChildFragmentManager(),getActivity()
                         ,productCatParent.get(position).getChildrenCat());
                 mViewPager.setAdapter(viewPagerExploreAdapter);
@@ -77,12 +81,6 @@ public class FragmentExplore extends Fragment {
 
                 if (productCatParent.get(position).getChildrenCat().size()!=0)
                     EventBus.getDefault().post(new MessageEvent(tabLayout.getTabAt(0).getText().toString()));
-                else
-                {
-                    String temp=productCatParent.get(position).getName().toString();
-                    Log.d("cat no child",temp);
-                    EventBus.getDefault().post(new MessageEvent(temp));
-                }
 
                 tabLayout.setOnTabSelectedListener(
                         new TabLayout.ViewPagerOnTabSelectedListener(mViewPager) {
@@ -90,17 +88,9 @@ public class FragmentExplore extends Fragment {
                             public void onTabSelected(TabLayout.Tab tab) {
                                 super.onTabSelected(tab);
                                 String tabName=tab.getText().toString();
-                                Log.d("Tab name",tabName);
-                           //     if (productCatParent.get(position).getChildrenCat().size()!=0)
-                                    EventBus.getDefault().post(new MessageEvent(tabName));
-//                               / else {
-//                                    String temp = productCatParent.get(position).getName();
-//                                    EventBus.getDefault().post(temp);
-//                                }
+                                EventBus.getDefault().post(new MessageEvent(tabName));
                             }
                         });
-
-
             }
 
             @Override
@@ -108,10 +98,6 @@ public class FragmentExplore extends Fragment {
 
             }
         });
-
-
-
-
 
         return view;
     }
@@ -127,15 +113,10 @@ public class FragmentExplore extends Fragment {
                 productCat=categoryResponse.getProductCategories();
                 getParentCategory(productCat);
                 spinner.setAdapter(new SpinnerAdapter(getActivity(),productCatParent));
-
-
-
-            }
-
-
-
-            @Override
+         }
+           @Override
             public void onFailure(Call<CategoryResponse> call, Throwable t) {
+                Log.i("Failure Reason",call.toString());
                 Log.i("Failure","Fail to get cat");
             }
         });
@@ -157,14 +138,19 @@ public class FragmentExplore extends Fragment {
     private void getChildren(List<ProductCategory> productCat) {
         for (int i =0;i<productCatParent.size();i++)
         {
-            List<ProductCategory>productChild= new ArrayList<>();
+            List<ProductCategory>productCatChild= new ArrayList<>();
             for (int y=0;y<productCat.size();y++)
             {
                 if (productCatParent.get(i).getId()==productCat.get(y).getParent())
-                    productChild.add(productCat.get(y));
+                    productCatChild.add(productCat.get(y));
             }
-            if (productChild.size()!=0)
-            productCatParent.get(i).setChildrenCat(productChild);
+            if (productCatChild.size()!=0)
+            productCatParent.get(i).setChildrenCat(productCatChild);
+            else
+            {
+                productCatChild.add(productCatParent.get(i));
+                productCatParent.get(i).setChildrenCat(productCatChild);
+            }
 
         }
     }
@@ -181,6 +167,23 @@ public class FragmentExplore extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu,menu);
+        MenuItem search = menu.findItem(R.id.action_search);
+        SearchView sv = new SearchView(((ExploreActivity)getActivity()).getSupportActionBar().getThemedContext());
+        MenuItemCompat.setShowAsAction(search, MenuItemCompat.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW|MenuItemCompat.SHOW_AS_ACTION_IF_ROOM);
+        MenuItemCompat.setActionView(search, sv);
+        sv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                EventBus.getDefault().post(new SearchKey(query));
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+
     }
 
 

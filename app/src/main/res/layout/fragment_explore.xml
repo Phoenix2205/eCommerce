@@ -25,7 +25,6 @@
         android:fitsSystemWindows="true"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-
         <include layout="@layout/explore_toolbar"></include>
 
         <android.support.design.widget.TabLayout

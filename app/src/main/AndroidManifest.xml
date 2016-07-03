@@ -31,8 +31,11 @@
         <activity
             android:name=".ExploreActivity"
             android:label="@string/title_activity_explore"
+            android:screenOrientation="portrait"
             android:theme="@style/ToolBarExplore" />
-        <activity android:name=".ProductDetailActivity"></activity>
+        <activity
+            android:name=".ProductDetailActivity"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

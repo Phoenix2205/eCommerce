@@ -37,7 +37,7 @@ public class ProductDataAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         Glide.with(context).load(mDataSet.get(position).getFeaturedSrc()).into(((ViewHolder) holder).productPhoto);
         ((ViewHolder) holder).productName.setText(mDataSet.get(position).getTitle());
-        ((ViewHolder) holder).price.setText(mDataSet.get(position).getPrice());
+        ((ViewHolder) holder).price.setText(mDataSet.get(position).getPrice()+ "$ ");
 
     }
 

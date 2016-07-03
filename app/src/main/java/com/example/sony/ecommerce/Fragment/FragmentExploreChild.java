@@ -13,7 +13,8 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.sony.ecommerce.Adapter.ProductDataAdapter;
-import com.example.sony.ecommerce.Model.MessageEvent;
+import com.example.sony.ecommerce.Message.MessageEvent;
+import com.example.sony.ecommerce.Message.SearchKey;
 import com.example.sony.ecommerce.Model.Product;
 import com.example.sony.ecommerce.Model.ProductResponse;
 import com.example.sony.ecommerce.R;
@@ -22,7 +23,9 @@ import com.example.sony.ecommerce.Service.WooCommerceService;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -37,7 +40,7 @@ public class FragmentExploreChild extends Fragment {
     RecyclerView categoryListView;
     RecyclerView.LayoutManager layoutManager;
     RecyclerView.Adapter adapter;
-   static String catName;
+    List<Product>productList;
     static Context context;
     public FragmentExploreChild() {
         // Required empty public constructor
@@ -62,17 +65,24 @@ public class FragmentExploreChild extends Fragment {
         layoutManager =  new LinearLayoutManager(context);
 
 
-     //  Toast.makeText(context,catName, Toast.LENGTH_SHORT).show();
         return view;
     }
-    @Subscribe
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(MessageEvent event){
         Toast.makeText(getActivity(), event.message, Toast.LENGTH_SHORT).show();
-        catName=event.message;
+       String catName=event.message;
         getData(catName);
         Log.i("Tab name received",catName);
 
     }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onGetKeyWord(SearchKey event){
+        Toast.makeText(getActivity(), event.message, Toast.LENGTH_SHORT).show();
+        getResultSearch(event.message);
+
+    }
+
 
     @Override
     public void onStart() {
@@ -90,14 +100,14 @@ public class FragmentExploreChild extends Fragment {
     void getData( String catName)
     {
         WooCommerceService service = ServiceGenerator.createService(WooCommerceService.class);
-        Call<ProductResponse> ListCategoryResponseCall= service.getListProductByCatName(catName);
+        Call<ProductResponse> ListCategoryResponseCall = service.getListProductByCatName(catName);
         ListCategoryResponseCall.enqueue(new Callback<ProductResponse>() {
 
             @Override
             public void onResponse(Call<ProductResponse> call, Response<ProductResponse> response) {
                 ProductResponse productResponse=response.body();
                 Log.d("Product List Size",String.valueOf(productResponse.getProducts().size()));
-                List<Product>productList=productResponse.getProducts();
+                productList=productResponse.getProducts();
                 categoryListView.setLayoutManager(layoutManager);
                 adapter = new ProductDataAdapter(context,productList);
                 categoryListView.setAdapter(adapter);
@@ -112,6 +122,15 @@ public class FragmentExploreChild extends Fragment {
         });
     }
 
+    void getResultSearch(String keyword)
+    {
+       for (int i =0;i<productList.size();i++) {
+           List<Product>TempList= new ArrayList<>();
+           if (productList.get(i).getTitle().equals(keyword))
+               TempList.add(productList.get(i));
+           categoryListView.setAdapter(new ProductDataAdapter(context,TempList));
+       }
 
+    }
 
 }

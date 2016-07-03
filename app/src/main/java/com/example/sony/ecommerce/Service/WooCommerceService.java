@@ -14,7 +14,7 @@ import retrofit2.http.Query;
  */
 public interface WooCommerceService {
 
-    @GET("products")
+    @GET("products?filter[limit]=-1")
     Call<ProductResponse> getListProducts();
 
     @GET("products/{id}")
