@@ -1,4 +1,4 @@
-package com.example.sony.ecommerce.Model;
+package com.example.sony.ecommerce.Message;
 
 /**
  * Created by SONY on 6/26/2016.
