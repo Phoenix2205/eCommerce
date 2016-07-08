@@ -40,7 +40,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:clickable="true"
-        android:src="@drawable/ic_cart"
+        android:src="@drawable/ic_fab_cart"
         app:layout_anchor="@id/image_view_banner"
         app:layout_anchorGravity="bottom|right|end"/>
 

@@ -48,7 +48,7 @@ public class OnSaleDataAdapter extends RecyclerView.Adapter {
             public void onClick(View v) {
                 Intent intent = new Intent(context, ProductDetailActivity.class);
                 intent.putExtra("ID",productsList.get(position).getId());
-                intent.putExtra("Saleprice",productsList.get(position).getSalePrice());
+                intent.putExtra("Price",productsList.get(position).getSalePrice());
                 context.startActivity(intent);
             }
         });

@@ -16,13 +16,12 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.sony.ecommerce.Adapter.ImageSliderAdapter;
+import com.example.sony.ecommerce.Database.DatabaseHelper;
 import com.example.sony.ecommerce.Model.Product;
 import com.example.sony.ecommerce.Model.SingleProductResponse;
 import com.example.sony.ecommerce.Service.ServiceGenerator;
 import com.example.sony.ecommerce.Service.WooCommerceService;
 import com.example.sony.ecommerce.ViewPager.CirclePageIndicator;
-
-import org.greenrobot.eventbus.EventBus;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -38,23 +37,24 @@ public class ProductDetailActivity extends AppCompatActivity {
     ImageButton imageButtonChat;
     ImageButton imageButtonMore;
     ViewPager viewPagerProductDetail;
-    FloatingActionButton fabCheckout;//nut mua
     Product product;
-    int ID;
-    String Saleprice;
-    String Normalprice;
+    int ID,RowID=1;
+    String Price;
+    String Normalprice,imgSrc;
     int[] imageList = new int[]{R.drawable.slider2, R.drawable.slider2, R.drawable.slider2};
     private CirclePageIndicator mIndicator;
     Toolbar toolbar;
-    FloatingActionButton add;
+    FloatingActionButton buyButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_detail);
         setContentView(R.layout.activity_product_detail);
         ID=getIntent().getIntExtra("ID",-1);
-        Saleprice=getIntent().getStringExtra("Saleprice");
-        // Normalprice=getIntent().getStringExtra("Normalprice"); cai nay lay gia tu ben explore
+        imgSrc=getIntent().getStringExtra("Photo");
+        Price=getIntent().getStringExtra("Price");
+        //Normalprice=getIntent().getStringExtra("NormalPrice");// cai nay lay gia tu ben explore
+
         Log.d("ID",String.valueOf(ID));
         onMapped();
         getData();
@@ -70,11 +70,31 @@ public class ProductDetailActivity extends AppCompatActivity {
                 finish();
             }
         });
-        add.setOnClickListener(new View.OnClickListener() {
+        buyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+              if (DatabaseHelper.IsDatabaseExist(ProductDetailActivity.this) == false) {
+                DatabaseHelper databaseHelper= new DatabaseHelper(ProductDetailActivity.this);
+                    int price = 0;
+                    price = Integer.parseInt(Price);
+                    boolean success = databaseHelper.InsertIntoCartTable( "abc", ID, product.getTitle(), price, 1,imgSrc);
+                    RowID++;
+                    Log.d("Insert table", String.valueOf(success));
+                } else {
+                    DatabaseHelper databaseHelper= new DatabaseHelper(ProductDetailActivity.this,DatabaseHelper.DATABASE_NAME);
+                    if (databaseHelper.GetDataCartTablebyID(ID)!=-1) {
+                        databaseHelper.UpdateQuantityCartTable(ID);
+                        Log.d("Update table", String.valueOf(databaseHelper.UpdateQuantityCartTable(ID)));
+                    }
+                    else {
+                        int price=0;
+                        price = Integer.parseInt(Price);
+                        boolean success = databaseHelper.InsertIntoCartTable("abc", ID, product.getTitle(), price, 1,imgSrc);
+                        Log.d("Insert table", String.valueOf(success));
+                        RowID++;
+                    }
 
-                EventBus.getDefault().post(product);
+                }
 
             }
         });
@@ -113,10 +133,9 @@ public class ProductDetailActivity extends AppCompatActivity {
         imageButtonFavorite=(ImageButton)findViewById(R.id.image_button_icon_favorite);
         imageButtonMore=(ImageButton)findViewById(R.id.image_button_icon_more);
         viewPagerProductDetail=(ViewPager)findViewById(R.id.view_pager_product_detail);
-        fabCheckout=(FloatingActionButton)findViewById(R.id.fab_product_detail);
+        buyButton =(FloatingActionButton)findViewById(R.id.fab_product_detail);
         mIndicator=(CirclePageIndicator)findViewById(R.id.indicator_product_detail);
         toolbar=(Toolbar)findViewById(R.id.toolbar_product_detail);
-        add=(FloatingActionButton) findViewById(R.id.fab_product_detail);
 
     }
 
@@ -141,10 +160,10 @@ public class ProductDetailActivity extends AppCompatActivity {
 
     private void setView() {
         Glide.with(this).load(product.getFeaturedSrc()).into(ivProductDetailPhoto);
-        if (Saleprice!=null) tvPrice.setText(product.getSalePrice().toString()+"$");
-        //else tvPrice.setText(product.getPrice().toString) lay gia thuong;
+        tvPrice.setText(Price+"$");
+
         tvCategoryName.setText(product.getCategories().get(0));
-        tvProductName.setText(product.getTitle()+" "+product.getCategories().get(1));
+        tvProductName.setText(product.getTitle());
         tvDescription.setText(product.getShortDescription());
         viewPagerProductDetail.setAdapter(new ImageSliderAdapter(this, imageList));
         mIndicator.setViewPager(viewPagerProductDetail);

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView
     android:layout_width="match_parent"
-    android:layout_height="200dp"
+    android:layout_height="wrap_content"
     android:id="@+id/card_view_container_on_sale_cell"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
@@ -48,11 +48,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="25dp"
                     android:background="@drawable/roundtangle"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
                     android:layout_marginRight="16dp"
+                    android:layout_marginBottom="16dp"
                     android:text="+ add"
-                    android:textAllCaps="false"
+                    android:textAllCaps="true"
+                    android:layout_below="@id/text_view_price_on_sale_cell"
                     android:id="@+id/button_add_on_sale_cell" />
             </RelativeLayout>
 

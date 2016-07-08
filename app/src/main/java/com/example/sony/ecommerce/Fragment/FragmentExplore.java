@@ -18,13 +18,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.sony.ecommerce.Adapter.SpinnerAdapter;
 import com.example.sony.ecommerce.Adapter.ViewPagerExploreAdapter;
 import com.example.sony.ecommerce.ExploreActivity;
-import com.example.sony.ecommerce.Message.SearchKey;
-import com.example.sony.ecommerce.Model.CategoryResponse;
 import com.example.sony.ecommerce.Message.MessageEvent;
+import com.example.sony.ecommerce.Message.SearchKey;
+import com.example.sony.ecommerce.Message.TriggerGrid;
+import com.example.sony.ecommerce.Model.CategoryResponse;
 import com.example.sony.ecommerce.Model.ProductCategory;
 import com.example.sony.ecommerce.R;
 import com.example.sony.ecommerce.Service.ServiceGenerator;
@@ -48,9 +50,10 @@ public class FragmentExplore extends Fragment {
     ViewPager mViewPager;
     TabLayout tabLayout;
     Spinner spinner;
+    boolean isListView=true;
     List<ProductCategory> productCat= new ArrayList<>();
     List<ProductCategory>productCatParent=new ArrayList<>();
-
+    Menu menu;
     public FragmentExplore() {
         // Required empty public constructor
     }
@@ -60,6 +63,7 @@ public class FragmentExplore extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view= inflater.inflate(R.layout.fragment_explore, container, false);
+
         toolbar=(Toolbar)view.findViewById(R.id.toolbar_explore);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
         setHasOptionsMenu(true);
@@ -108,7 +112,8 @@ public class FragmentExplore extends Fragment {
         categoryResponsecall.enqueue(new Callback<CategoryResponse>() {
             @Override
             public void onResponse(Call<CategoryResponse> call, Response<CategoryResponse> response) {
-                CategoryResponse categoryResponse=response.body();
+                CategoryResponse categoryResponse=new CategoryResponse();
+                       categoryResponse =response.body();
                 Log.d("category list",String.valueOf(categoryResponse.getProductCategories().size()));
                 productCat=categoryResponse.getProductCategories();
                 getParentCategory(productCat);
@@ -159,14 +164,63 @@ public class FragmentExplore extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        int id=item.getItemId();
+        switch (id) {
+            case R.id.action_grid: {
+                Toast.makeText(getActivity(), "Grid selected", Toast.LENGTH_SHORT).show();
+                toggle();
+                return true;
+            }
+        }
+//            case R.id.action_search:
+//            {
+//                Toast.makeText(getActivity(),"Search selected",Toast.LENGTH_SHORT).show();
+//                SearchView sv = new SearchView(((ExploreActivity)getActivity()).getSupportActionBar().getThemedContext());
+//                sv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//                    @Override
+//                    public boolean onQueryTextSubmit(String query) {
+//                        EventBus.getDefault().post(new SearchKey(query));
+//                        return false;
+//                    }
+//
+//                    @Override
+//                    public boolean onQueryTextChange(String newText) {
+//                        return false;
+//                    }
+//                });
+//            }
+//        }
 
         return super.onOptionsItemSelected(item);
     }
+
+    private void toggle() {
+
+        MenuItem item = menu.findItem(R.id.action_grid);
+        if (isListView)
+        {
+            item.setIcon(R.drawable.ic_action_list);
+            boolean temp=isListView;
+            isListView=false;
+            EventBus.getDefault().post(new TriggerGrid(temp));
+
+        }
+        else
+        {
+            item.setIcon(R.drawable.ic_grid);
+            boolean temp=isListView;
+            isListView = true;
+            EventBus.getDefault().post(new TriggerGrid(temp));
+
+        }
+    }
+
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu,menu);
+        this.menu=menu;
         MenuItem search = menu.findItem(R.id.action_search);
         SearchView sv = new SearchView(((ExploreActivity)getActivity()).getSupportActionBar().getThemedContext());
         MenuItemCompat.setShowAsAction(search, MenuItemCompat.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW|MenuItemCompat.SHOW_AS_ACTION_IF_ROOM);

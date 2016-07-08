@@ -14,7 +14,7 @@
         android:id="@+id/action_grid"
         android:icon="@drawable/ic_grid"
         android:orderInCategory="100"
-        android:title="Search"
+        android:title="Grid"
         app:showAsAction="ifRoom"></item>
 
 </menu>

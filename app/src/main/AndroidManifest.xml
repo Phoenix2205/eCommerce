@@ -32,10 +32,16 @@
             android:name=".ExploreActivity"
             android:label="@string/title_activity_explore"
             android:screenOrientation="portrait"
-            android:theme="@style/ToolBarExplore" />
+            android:theme="@style/ToolBarExplore"
+            />
         <activity
             android:name=".ProductDetailActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"
+            android:theme="@style/ToolBarExplore" />
+        <activity
+            android:name=".SearchActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ToolBarExplore"></activity>
     </application>
 
 </manifest>

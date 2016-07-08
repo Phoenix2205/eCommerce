@@ -1,13 +1,16 @@
 
 package com.example.sony.ecommerce.Model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Product {
+public class Product implements Parcelable {
 
     @SerializedName("title")
     @Expose
@@ -190,8 +193,24 @@ public class Product {
     @Expose
     private Integer menuOrder;
 
+    public int getQuantity() {
+        return quantity;
+    }
 
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
 
+    private int quantity;
+
+    public Product(Parcel in) {
+        id=in.readInt();
+        title=in.readString();
+        price=in.readString();
+        featuredSrc=in.readString();
+    }
+
+    public Product() {}
     /**
      * 
      * @return
@@ -1271,5 +1290,31 @@ public class Product {
     public void setMenuOrder(Integer menuOrder) {
         this.menuOrder = menuOrder;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(title);
+        dest.writeString(price);
+        dest.writeInt(id);
+        dest.writeString(featuredSrc);
+
+    }
+
+    public static final Parcelable.Creator<Product> CREATOR = new Parcelable.Creator<Product>()
+    {
+        public Product createFromParcel(Parcel in)
+        {
+            return new Product(in);
+        }
+        public Product[] newArray(int size)
+        {
+            return new Product[size];
+        }
+    };
 
 }

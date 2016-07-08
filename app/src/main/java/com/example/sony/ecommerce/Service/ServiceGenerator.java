@@ -8,7 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by SONY on 6/11/2016.
  */
 public class ServiceGenerator {
-    public static final String API_BASE_URL="http://54.169.197.249/wc-api/v3/";
+    public static final String API_BASE_URL="http://lshxf6oyz-site.gtempurl.com/wp/wc-api/v3/";
     private static OkHttpClient.Builder httpClient= new OkHttpClient.Builder().addInterceptor(new BasicAuthInterceptor());;
     public static Retrofit.Builder builder= new Retrofit.Builder().
             baseUrl(API_BASE_URL).

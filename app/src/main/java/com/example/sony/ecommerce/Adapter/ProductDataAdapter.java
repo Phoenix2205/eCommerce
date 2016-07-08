@@ -1,6 +1,8 @@
 package com.example.sony.ecommerce.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +13,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.sony.ecommerce.Model.Product;
+import com.example.sony.ecommerce.ProductDetailActivity;
 import com.example.sony.ecommerce.R;
 
 import java.util.List;
@@ -34,10 +37,20 @@ public class ProductDataAdapter extends RecyclerView.Adapter {
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         Glide.with(context).load(mDataSet.get(position).getFeaturedSrc()).into(((ViewHolder) holder).productPhoto);
         ((ViewHolder) holder).productName.setText(mDataSet.get(position).getTitle());
         ((ViewHolder) holder).price.setText(mDataSet.get(position).getPrice()+ "$ ");
+        ((ViewHolder)holder).cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent= new Intent(context, ProductDetailActivity.class);
+                intent.putExtra("ID",mDataSet.get(position).getId());
+                intent.putExtra("Price", mDataSet.get(position).getPrice() );
+                intent.putExtra("Photo",mDataSet.get(position).getFeaturedSrc());
+                context.startActivity(intent);
+            }
+        });
 
     }
 
@@ -52,6 +65,7 @@ public class ProductDataAdapter extends RecyclerView.Adapter {
         public static TextView productName;
         public static TextView price;
         public static Button add;
+        public static CardView cardView;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -60,6 +74,7 @@ public class ProductDataAdapter extends RecyclerView.Adapter {
             productName=(TextView)itemView.findViewById(R.id.text_view_product_name_explore_cell);
             price=(TextView)itemView.findViewById(R.id.text_view_price_explore_cell);
             add=(Button)itemView.findViewById(R.id.button_add_explore_cell);
+            cardView=(CardView)itemView.findViewById(R.id.card_view_product_explore_cell);
 
         }
     }

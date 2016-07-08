@@ -17,6 +17,10 @@
         <item name="android:statusBarColor">@color/colorStatusBar</item>
     </style>
 
+    <style name="Toolbar.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textSize">18sp</item>
+    </style>
+
     <style name="Glam.Login"></style>
 
     <style name="Glam.Signin"></style>

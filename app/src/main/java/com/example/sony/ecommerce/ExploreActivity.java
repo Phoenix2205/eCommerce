@@ -7,6 +7,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
+import com.example.sony.ecommerce.Fragment.FragmentCart;
 import com.example.sony.ecommerce.Fragment.FragmentExplore;
 import com.example.sony.ecommerce.Fragment.FragmentOnSale;
 
@@ -81,6 +82,11 @@ public class ExploreActivity extends AppCompatActivity
         } else if (id == R.id.nav_favorite) {
 
         } else if (id == R.id.nav_cart) {
+            FragmentCart fragmentCart = new FragmentCart();
+            fragmentTransaction.replace(R.id.explore_contain,fragmentCart);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+
 
         } else if (id == R.id.nav_setting) {
 //            getFragmentManager().beginTransaction()

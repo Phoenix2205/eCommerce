@@ -4,8 +4,8 @@ package com.example.sony.ecommerce.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.example.sony.ecommerce.Adapter.ProductDataAdapter;
 import com.example.sony.ecommerce.Message.MessageEvent;
 import com.example.sony.ecommerce.Message.SearchKey;
+import com.example.sony.ecommerce.Message.TriggerGrid;
 import com.example.sony.ecommerce.Model.Product;
 import com.example.sony.ecommerce.Model.ProductResponse;
 import com.example.sony.ecommerce.R;
@@ -38,10 +39,11 @@ import retrofit2.Response;
 public class FragmentExploreChild extends Fragment {
     private static final String ARG_SECTION_NUMBER = "section_number";
     RecyclerView categoryListView;
-    RecyclerView.LayoutManager layoutManager;
+    private StaggeredGridLayoutManager mStaggeredLayoutManager;
     RecyclerView.Adapter adapter;
     List<Product>productList;
     static Context context;
+    boolean ListView ;
     public FragmentExploreChild() {
         // Required empty public constructor
     }
@@ -62,15 +64,18 @@ public class FragmentExploreChild extends Fragment {
         // Inflate the layout for this fragment
         View view=inflater.inflate(R.layout.fragment_explore_child, container, false);
         categoryListView=(RecyclerView)view.findViewById(R.id.recycler_view_explore_child);
-        layoutManager =  new LinearLayoutManager(context);
-
+        ListView=true;
+        if(ListView)
+            mStaggeredLayoutManager =   new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
+        else
+            mStaggeredLayoutManager =   new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
 
         return view;
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(MessageEvent event){
         Toast.makeText(getActivity(), event.message, Toast.LENGTH_SHORT).show();
-       String catName=event.message;
+        String catName=event.message;
         getData(catName);
         Log.i("Tab name received",catName);
 
@@ -83,6 +88,24 @@ public class FragmentExploreChild extends Fragment {
 
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onTriggerGridView(TriggerGrid event){
+        Toast.makeText(getActivity(), "grid view is triggered", Toast.LENGTH_SHORT).show();
+        toggle(event.isTrigger());
+
+    }
+
+    private void toggle(boolean isTrigger) {
+        if (isTrigger) {
+            mStaggeredLayoutManager.setSpanCount(2);
+            ListView =false;
+        }
+        else {
+            mStaggeredLayoutManager.setSpanCount(1);
+            ListView =true;
+        }
+
+    }
 
     @Override
     public void onStart() {
@@ -108,7 +131,7 @@ public class FragmentExploreChild extends Fragment {
                 ProductResponse productResponse=response.body();
                 Log.d("Product List Size",String.valueOf(productResponse.getProducts().size()));
                 productList=productResponse.getProducts();
-                categoryListView.setLayoutManager(layoutManager);
+                categoryListView.setLayoutManager(mStaggeredLayoutManager);
                 adapter = new ProductDataAdapter(context,productList);
                 categoryListView.setAdapter(adapter);
 
@@ -124,13 +147,21 @@ public class FragmentExploreChild extends Fragment {
 
     void getResultSearch(String keyword)
     {
+        List<Product>TempList= new ArrayList<>();
        for (int i =0;i<productList.size();i++) {
-           List<Product>TempList= new ArrayList<>();
+
            if (productList.get(i).getTitle().equals(keyword))
                TempList.add(productList.get(i));
-           categoryListView.setAdapter(new ProductDataAdapter(context,TempList));
-       }
 
+       }
+        adapter = new ProductDataAdapter(context,TempList);
+        categoryListView.setAdapter(adapter);
+
+
+
+//        Intent intent = new Intent(getActivity(), SearchActivity.class);
+//        intent.putParcelableArrayListExtra("ResultList", (ArrayList<? extends Parcelable>) TempList);
+//        startActivity(intent);
     }
 
 }
