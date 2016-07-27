@@ -38,7 +38,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     ImageButton imageButtonMore;
     ViewPager viewPagerProductDetail;
     Product product;
-    int ID,RowID=1;
+    int productID,RowID=1;
     String Price;
     String Normalprice,imgSrc;
     int[] imageList = new int[]{R.drawable.slider2, R.drawable.slider2, R.drawable.slider2};
@@ -50,12 +50,12 @@ public class ProductDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_detail);
         setContentView(R.layout.activity_product_detail);
-        ID=getIntent().getIntExtra("ID",-1);
+        productID =getIntent().getIntExtra("productID",-1);
         imgSrc=getIntent().getStringExtra("Photo");
         Price=getIntent().getStringExtra("Price");
         //Normalprice=getIntent().getStringExtra("NormalPrice");// cai nay lay gia tu ben explore
 
-        Log.d("ID",String.valueOf(ID));
+        Log.d("productID",String.valueOf(productID));
         onMapped();
         getData();
         setSupportActionBar(toolbar);
@@ -75,23 +75,20 @@ public class ProductDetailActivity extends AppCompatActivity {
             public void onClick(View v) {
               if (DatabaseHelper.IsDatabaseExist(ProductDetailActivity.this) == false) {
                 DatabaseHelper databaseHelper= new DatabaseHelper(ProductDetailActivity.this);
-                    int price = 0;
-                    price = Integer.parseInt(Price);
-                    boolean success = databaseHelper.InsertIntoCartTable( "abc", ID, product.getTitle(), price, 1,imgSrc);
-                    RowID++;
+                    int price = Integer.parseInt(Price);
+                    boolean success = databaseHelper.InsertIntoCartTable( "abc", productID, product.getTitle(), price, 1,imgSrc);
                     Log.d("Insert table", String.valueOf(success));
                 } else {
                     DatabaseHelper databaseHelper= new DatabaseHelper(ProductDetailActivity.this,DatabaseHelper.DATABASE_NAME);
-                    if (databaseHelper.GetDataCartTablebyID(ID)!=-1) {
-                        databaseHelper.UpdateQuantityCartTable(ID);
-                        Log.d("Update table", String.valueOf(databaseHelper.UpdateQuantityCartTable(ID)));
+                    if (databaseHelper.GetDataCartTablebyID(productID)!=-1) {
+                        boolean success=databaseHelper.UpdateQuantityCartTable(productID);
+                        Log.d("Update table",String.valueOf(success));
                     }
                     else {
-                        int price=0;
-                        price = Integer.parseInt(Price);
-                        boolean success = databaseHelper.InsertIntoCartTable("abc", ID, product.getTitle(), price, 1,imgSrc);
+                        int price= Integer.parseInt(Price);
+                        boolean success = databaseHelper.InsertIntoCartTable("abc", productID, product.getTitle(), price, 1,imgSrc);
                         Log.d("Insert table", String.valueOf(success));
-                        RowID++;
+
                     }
 
                 }
@@ -142,7 +139,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     public  void getData()
     {
         WooCommerceService wooCommerceService= ServiceGenerator.createService(WooCommerceService.class);
-        Call<SingleProductResponse> productResponseCall=wooCommerceService.getProductById(ID);
+        Call<SingleProductResponse> productResponseCall=wooCommerceService.getProductById(productID);
         productResponseCall.enqueue(new Callback<SingleProductResponse>() {
             @Override
             public void onResponse(Call<SingleProductResponse> call, Response<SingleProductResponse> response) {

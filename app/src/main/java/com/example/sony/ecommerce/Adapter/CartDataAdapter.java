@@ -40,7 +40,7 @@ public class CartDataAdapter extends RecyclerView.Adapter {
         Glide.with(context).load(productList.get(position).getFeaturedSrc()).into(((ViewHolder) holder).productPhoto);
         ((ViewHolder) holder).productName.setText((productList.get(position).getTitle()));
         ((ViewHolder) holder).price.setText((productList.get(position).getPrice()+ "$ "));
-        ((ViewHolder) holder).quantity.setText((productList.get(position).getQuantity()));
+        ((ViewHolder) holder).quantity.setText("Quantity: "+(String.valueOf(productList.get(position).getQuantity())));
 //        ((ViewHolder)holder).cardView.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -55,7 +55,7 @@ public class CartDataAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return 0;
+        return productList.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -71,7 +71,7 @@ public class CartDataAdapter extends RecyclerView.Adapter {
             productPhoto = (ImageView) itemView.findViewById(R.id.image_view_product_cart_cell);
             productName = (TextView) itemView.findViewById(R.id.text_view_product_name_cart_cell);
             price = (TextView) itemView.findViewById(R.id.text_view_price_cart_cell);
-            remove = (Button) itemView.findViewById(R.id.button_add_cart_cell);
+            remove = (Button) itemView.findViewById(R.id.button_remove_cart_cell);
             cardView = (CardView) itemView.findViewById(R.id.card_view_product_cart_cell);
             quantity=(TextView)itemView.findViewById(R.id.text_view_quantity_cart_cell);
         }

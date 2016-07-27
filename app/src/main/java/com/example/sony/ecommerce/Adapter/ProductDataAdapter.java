@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.sony.ecommerce.Database.DatabaseHelper;
 import com.example.sony.ecommerce.Model.Product;
 import com.example.sony.ecommerce.ProductDetailActivity;
 import com.example.sony.ecommerce.R;
@@ -38,6 +40,11 @@ public class ProductDataAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+       final String photo=mDataSet.get(position).getFeaturedSrc();
+       final String title=mDataSet.get(position).getTitle();
+       final int ID=mDataSet.get(position).getId();
+        final int price=Integer.parseInt(mDataSet.get(position).getPrice());
+
         Glide.with(context).load(mDataSet.get(position).getFeaturedSrc()).into(((ViewHolder) holder).productPhoto);
         ((ViewHolder) holder).productName.setText(mDataSet.get(position).getTitle());
         ((ViewHolder) holder).price.setText(mDataSet.get(position).getPrice()+ "$ ");
@@ -49,6 +56,34 @@ public class ProductDataAdapter extends RecyclerView.Adapter {
                 intent.putExtra("Price", mDataSet.get(position).getPrice() );
                 intent.putExtra("Photo",mDataSet.get(position).getFeaturedSrc());
                 context.startActivity(intent);
+            }
+        });
+
+        ((ViewHolder)holder).add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (DatabaseHelper.IsDatabaseExist(context) == false) {
+
+                    DatabaseHelper databaseHelper= new DatabaseHelper(context);
+                    //int price = Integer.parseInt(mDataSet.get(position).getPrice());
+                    boolean success = databaseHelper.InsertIntoCartTable( "abc",ID,
+                            title,price , 1,photo);
+                    Log.d("Insert table", String.valueOf(success));
+                } else {
+                    DatabaseHelper databaseHelper= new DatabaseHelper(context,DatabaseHelper.DATABASE_NAME);
+                    if (databaseHelper.GetDataCartTablebyID(ID)!=-1) {
+                        boolean success=databaseHelper.UpdateQuantityCartTable(ID);
+                        Log.d("Update table",String.valueOf(success));
+                    }
+                    else {
+                       // int price= Integer.parseInt(Price);
+                        boolean success = databaseHelper.InsertIntoCartTable("abc", ID, title, price, 1,photo);
+                        Log.d("Insert table", String.valueOf(success));
+
+                    }
+
+                }
+
             }
         });
 

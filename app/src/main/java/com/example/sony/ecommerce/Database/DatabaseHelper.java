@@ -48,7 +48,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues=new ContentValues();
-        contentValues.put(DatabaseSchema.CARTTABLE.COLUMN_NAME_ENTRY_ID,ROW_ID);  ROW_ID++;
+        contentValues.put(DatabaseSchema.CARTTABLE.COLUMN_NAME_ENTRY_ID,ROW_ID);
+        ROW_ID++;
         contentValues.put(DatabaseSchema.CARTTABLE.COLUMN_NAME_USER_NAME,UserName);
         contentValues.put(DatabaseSchema.CARTTABLE.COLUMN_NAME_ITEM_ID,IDItem);
         contentValues.put(DatabaseSchema.CARTTABLE.COLUMN_NAME_ITEM_NAME,ItemName);
@@ -152,7 +153,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String packageName = context.getPackageName();
         String DB_PATH = "/data/data/"+ packageName +"/databases/";
 
-        //String DB_PATH = String.format("//data//data//%s//databases//", packageName);
         String path= DB_PATH + DATABASE_NAME;
         SQLiteDatabase database =SQLiteDatabase.openDatabase(path,null,
                 SQLiteDatabase.OPEN_READWRITE);
